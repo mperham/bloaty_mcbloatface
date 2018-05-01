@@ -1,0 +1,19 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 25 } %>
+  username: root
+  password:
+  host: mariadb
+
+development:
+  <<: *default
+  database: bloat_development
+
+test:
+  <<: *default
+  database: bloat_test
+
+production:
+  <<: *default
+  database: bloat_production

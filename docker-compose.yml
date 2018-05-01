@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  bloat:
+    tty: true # Enables debugging capabilities when attached to this container.
+    image: 'bitnami/rails:latest'
+    labels:
+      kompose.service.type: nodeport
+    environment:
+      - MALLOC_ARENA_MAX=64
+      - DATABASE_URL=mysql2://mariadb/app_production
+      - RAILS_ENV=production
+    depends_on:
+      - mariadb
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
