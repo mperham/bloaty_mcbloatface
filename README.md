@@ -46,19 +46,14 @@ space.
 > **Note**: this is my best understanding of the problem. It may be
 > slightly wrong, mostly wrong or [not even wrong](https://en.wikipedia.org/wiki/Not_even_wrong).
 
-> **Note**: there's more than one way for a Ruby process to bloat.
-> Ruby also allocates heap pages which, in practice, aren't ever
-> returned to the system so a Rails request which creates a lot of temporary
-> objects can also lead to process bloat.
-
 ## The Solution
 
-1. Use jemalloc.
+1. Use jemalloc.  One of its explicit goals is to minimize fragmentation.
 2. Set `MALLOC_ARENA_MAX=2`.
 
 This will force glibc to stick with two working arenas, no matter how
 contended.  Heavily multithreaded systems like Sidekiq might see a small
-performance dip but with greatly reduced memory usage.
+performance dip but with greatly reduced memory bloat.
 
 ### Setup
 
